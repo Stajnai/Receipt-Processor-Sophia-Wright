@@ -25,6 +25,7 @@ receipts = {}
 
 # Helper function that returns a Universally Unique IDentifier v4 (UUID4) in str format
 def generate_receipt_id():
+    """Room for improvement: Vet the output to match the regex string for IDs"""
     return str(uuid.uuid4())
 
 # Helper funtion that adds the given {id: receipt} to the dedicated receipts memory
@@ -51,10 +52,18 @@ def process_receipts():
         add_receipt_by_id(id, receipt_data)
 
         return jsonify({'id': id}), 200
+    
     except jsonschema.ValidationError as e:
         # Receipt failed validation, send error
         return make_response(f"Receipt is invalid: {e.message}", 404) # SOF: Maybe remove the message since it's not in the yml
-    
+
+#################################
+# API METHOD: /receipts/process #
+#################################
+@app.route('/receipts/<id>/points', methods=['GET'])
+def get_receipt_points(id):
+    return id
+
 
 
 if __name__ == '__main__':
