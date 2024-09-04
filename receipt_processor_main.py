@@ -53,7 +53,7 @@ def process_receipts():
         return jsonify({'id': id}), 200
     except jsonschema.ValidationError as e:
         # Receipt failed validation, send error
-        return make_response(f"Receipt is invalid: {e.message}", 400)
+        return make_response(f"Receipt is invalid: {e.message}", 404) # SOF: Maybe remove the message since it's not in the yml
     
 
 
