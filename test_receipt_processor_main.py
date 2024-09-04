@@ -1,19 +1,12 @@
 from receipt_processor_main import app
 import re
+import json
 
-APP_IP = '127.0.0.1'
-APP_API_PORT = '8080'
 ID_PATTERN = re.compile("^\\S+$")
 
-simple_receipt = {
-    "retailer": "Target",
-    "purchaseDate": "2022-01-02",
-    "purchaseTime": "13:13",
-    "total": "1.25",
-    "items": [
-        {"shortDescription": "Pepsi - 12-oz", "price": "1.25"}
-    ]
-}
+with open('data/test_data/simple-receipt.json') as simple_receipt_file:
+    SIMPLE_RECEIPT = json.load(simple_receipt_file)
+
 
 ################################
 # Tests for process_receipts() #
@@ -27,7 +20,7 @@ def test_process_receipts__simple_valid_receipt():
 
         ''' ACT '''
         # Send the POST request to the API /receipts/process
-        response = client.post('/receipts/process', json=simple_receipt)
+        response = client.post('/receipts/process', json=SIMPLE_RECEIPT)
 
         ''' ASSERT '''
 
@@ -35,7 +28,7 @@ def test_process_receipts__simple_valid_receipt():
         response_data = response.get_json()
 
         # Make sure we got a good status code (ie. 200)
-        assert response.status_code == 200
+        assert response.status_code == 200, f"{response.data}"
 
         # Make sure we have an 'id' property
         assert 'id' in response_data
