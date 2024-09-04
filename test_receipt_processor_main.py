@@ -1,5 +1,3 @@
-import pytest
-from flask import jsonify
 from receipt_processor_main import app
 import re
 
@@ -47,5 +45,3 @@ def test_process_receipts__simple_valid_receipt():
 
         # Make sure the 'id' property is in the right format
         assert ID_PATTERN.match(response_data['id'])
-
-        print(response_data)
