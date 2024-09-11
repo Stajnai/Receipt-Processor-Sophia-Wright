@@ -219,3 +219,35 @@ class Test_Process_Receipts:
 
             # Make sure the 'reason the receipt is invalid is for the reason we expect
             #assert response.data == b"Receipt is invalid: "
+
+class Test_receipts_points():
+    def test_receipts_points__simple_valid_receipt(self):
+        with app.test_client() as client:
+
+            ''' ARRANGE '''
+            # Using valid simple receipt for data
+            with open('data/test_data/simple-receipt.json') as simple_receipt_file:
+                simple_receipt = json.load(simple_receipt_file)
+
+            # Send the POST request to the API /receipts/process
+            id_response = client.post('/receipts/process', json=simple_receipt)
+            
+            # Get the data for the ID
+            id_response_data = id_response.get_json()
+
+            ''' ACT '''
+            points_response = client.get(f'/receipts/{id_response_data['id']}/points')
+
+            ''' ASSERT '''
+            points_response_data = points_response.get_json()
+            # Make sure we got a good status code (ie. 200)
+            assert points_response.status_code == 200, f"{points_response.data}"
+
+            # Make sure we have a 'points' property
+            assert 'points' in points_response_data
+
+            # Make sure the 'points' property is a number
+            assert isinstance(points_response_data['points'], int)
+
+            # Make sure we got the right number of points
+            assert points_response_data['points'] == 6 # Target = 6 chars
