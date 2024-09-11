@@ -250,4 +250,4 @@ class Test_receipts_points():
             assert isinstance(points_response_data['points'], int)
 
             # Make sure we got the right number of points
-            assert points_response_data['points'] == 6 # Target = 6 chars
+            assert points_response_data['points'] == 31 # Target = 6 chars

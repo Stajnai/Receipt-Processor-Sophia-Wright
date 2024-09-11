@@ -78,11 +78,19 @@ class Calculate_Receipt_Points:
                 self.pointsTotal += 1
 
     def roundTotal(self):
-        pass
+        # We can easily find the decimal by subtracting the whole number (int) from the total
+        decimal = float(self.total) - (int(float(self.total))) # you have to turn it into a float first in case there is a decimal
+        if(decimal == 0):
+            self.pointsTotal += 50
+
     def totalMultipleOf25Cents(self):
-        pass
+        if(float(self.total) % 0.25 == 0):
+            self.pointsTotal += 25
+
     def twoItemCount(self):
-        pass
+        pairs = int(len(self.items) / 2)
+        self.pointsTotal += pairs * 5
+
     def shortDecriptionMultipleOf3(self):
         pass
     def oddDay(self):
@@ -96,6 +104,9 @@ def get_receipt_points(id):
     # Create the class and run the methods desired
     receipt_calc = Calculate_Receipt_Points(receipts[id])
     receipt_calc.alphaNumInRetailer()
+    receipt_calc.roundTotal()
+    receipt_calc.totalMultipleOf25Cents()
+    receipt_calc.twoItemCount()
 
     return jsonify({"points": receipt_calc.pointsTotal})
 
